@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - Recepción de OCs | Impresos S.R.L.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* COLORES CORPORATIVOS (Impresos S.R.L.) */
+        .color-primary-red { background-color: #E31B23; } 
+        .text-primary-red { color: #E31B23; }
+        .border-primary-red { border-color: #E31B23; }
+        .nav-sidebar-bg { background-color: #334155; }
+        .nav-link { transition: background-color 0.2s, color 0.2s; }
+        .nav-link:hover { background-color: #475569; }
+        .nav-link.active { background-color: #E31B23; color: white; }
+
+        body { font-family: 'Inter', sans-serif; }
+        .table-header-bg { background-color: #334155; }
+        .form-input { transition: border-color 0.15s, box-shadow 0.15s; }
+        .form-input:focus { border-color: #E31B23; box-shadow: 0 0 0 3px rgba(227, 27, 35, 0.3); }
+    </style>
+</head>
+<body>
+
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <div id="sidebar-menu" class="w-64 fixed top-0 left-0 h-full nav-sidebar-bg shadow-2xl z-20 overflow-y-auto transition-all duration-300">
+            <!-- Renderizado por JS -->
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="flex-1 ml-64 p-8 overflow-y-auto z-10 transition-all duration-300">
+            <header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-8">
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <h1 class="text-3xl font-bold text-gray-800">Recepción de Órdenes de Compra</h1>
+                </div>
+                <span class="text-sm text-gray-500">Módulo: Inventario y Compras</span>
+            </header>
+            
+            <!-- Controles Superiores -->
+            <div class="flex flex-col lg:flex-row justify-between items-center mb-6 space-y-4 lg:space-y-0 lg:space-x-4">
+                <!-- Barra de Búsqueda -->
+                <div class="relative w-full lg:w-96">
+                    <input type="text" id="search-input" placeholder="Buscar por Proveedor o Código de OC..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 shadow-sm">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                </div>
+                
+                <div class="flex space-x-4 w-full lg:w-auto">
+                    <!-- Botón de Filtros -->
+                    <button id="filter-button" class="w-full lg:w-auto flex items-center justify-center px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-400 transition">
+                        <i data-lucide="filter" class="w-5 h-5 mr-2"></i> Filtros
+                    </button>
+                    <!-- Botones de Exportación -->
+                    <button class="w-full lg:w-auto flex items-center justify-center px-4 py-2 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition">
+                        <i data-lucide="file-spreadsheet" class="w-5 h-5 mr-2"></i> Exportar Excel
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Panel de Filtros (Visual Placeholder) -->
+            <div id="filter-panel" class="bg-white p-6 rounded-xl shadow-lg mb-6 hidden">...</div>
+
+            <!-- Tabla de OCs (Visual Placeholder) -->
+            <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="table-header-bg">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Código OC</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Proveedor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Fecha Creación</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Fecha Recepción</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="oc-table-body" class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm font-mono text-gray-700">OC-2025-001</td>
+                                <td class="px-6 py-4 text-sm font-bold text-gray-900">Proveedor de Papeles S.A.</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">10 nov 2025, 10:00</td>
+                                <td class="px-6 py-4 text-sm text-gray-500"> (Pendiente)</td>
+                                <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Enviada</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                    <button id="btn-receive" class="flex items-center justify-center mx-auto px-3 py-1 text-sm color-primary-red text-white font-semibold rounded-lg shadow-sm hover:bg-red-700 transition">
+                                        <i data-lucide="package-check" class="w-4 h-4 mr-1"></i> Recibir Mercancía
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm font-mono text-gray-700">OC-2025-002</td>
+                                <td class="px-6 py-4 text-sm font-bold text-gray-900">Importadora de Tintas Ltd.</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">05 nov 2025, 15:30</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">10 nov 2025, 14:00</td>
+                                <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Recibida (Completa)</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                    <button disabled class="flex items-center justify-center mx-auto px-3 py-1 text-sm bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed">
+                                        <i data-lucide="check" class="w-4 h-4 mr-1"></i> Recibida
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Paginación -->
+            <div id="pagination-controls" class="mt-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-lg">...</div>
+        </div>
+
+        <!-- Modal: Recibir Mercancía -->
+        <div id="receive-modal-container" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-xl bg-white">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Recibir Mercancía: OC-2025-001</h3>
+                <form id="receive-form" class="space-y-4">
+                    <p class="text-sm text-gray-600">Confirme las cantidades recibidas para cada ítem de la orden.</p>
+                    
+                    <!-- Lista de Ítems -->
+                    <div class="border rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Producto</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Cant. Solicitada</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Cant. Recibida</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-3 font-medium text-gray-800">Papel Couche 150gr</td>
+                                    <td class="px-4 py-3 text-gray-700">5000</td>
+                                    <td class="px-4 py-3"><input type="number" value="5000" max="5000" min="0" class="form-input w-24 p-2 border border-gray-300 rounded-lg"></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-medium text-gray-800">Papel Bond 90gr</td>
+                                    <td class="px-4 py-3 text-gray-700">2000</td>
+                                    <td class="px-4 py-3"><input type="number" value="2000" max="2000" min="0" class="form-input w-24 p-2 border border-gray-300 rounded-lg"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Comentarios de Recepción (Daños, Faltantes, etc.)</label>
+                        <textarea rows="3" class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideModal('receive-modal-container')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 color-primary-red text-white rounded-lg hover:bg-red-700">Confirmar Recepción e Ingresar Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+        // Cargar iconos de Lucide al inicio
+        lucide.createIcons();
+
+        // =========================================================
+        // 0. NAVEGACIÓN Y CONFIGURACIÓN GLOBAL (VISUAL ONLY)
+        // =========================================================
+        const NAV_LINKS = [
+            { id: 'dashboard', name: 'Dashboard Inventario', icon: 'layout-dashboard', href: 'inicio.html' },
+            { id: 'inventario', name: 'Gestión de Stock', icon: 'boxes', href: 'inventarios.html' },
+            { id: 'recepcion', name: 'Recepción de Compras', icon: 'package-check', href: 'inventario_recepcion.html' },
+            { id: 'reportes', name: 'Reportes', icon: 'pie-chart', href: 'reportes.html' }
+        ];
+        
+        let sidebarVisible = true;
+
+        window.toggleSidebar = function() {
+            /* (misma función de toggleSidebar) */
+            const sidebarEl = document.getElementById('sidebar-menu');
+            const mainContentEl = document.getElementById('main-content');
+            const toggleIconEl = document.querySelector('#sidebar-toggle i');
+            if (!mainContentEl || !sidebarEl || !toggleIconEl) return;
+            sidebarVisible = !sidebarVisible;
+            if (sidebarVisible) {
+                sidebarEl.classList.remove('-translate-x-full');
+                mainContentEl.classList.add('ml-64');
+                toggleIconEl.setAttribute('data-lucide', 'menu');
+            } else {
+                sidebarEl.classList.add('-translate-x-full');
+                mainContentEl.classList.remove('ml-64');
+                toggleIconEl.setAttribute('data-lucide', 'chevrons-right');
+            }
+            lucide.createIcons();
+        }
+
+        function renderSidebar(currentPage, userName = 'Usuario') {
+            /* (misma función de renderSidebar) */
+            const menuContainer = document.getElementById('sidebar-menu');
+            let linksHtml = '';
+            NAV_LINKS.forEach(link => {
+                const isActive = currentPage === link.href;
+                linksHtml += `
+                    <a href="${link.href}" class="nav-link flex items-center px-4 py-3 rounded-lg text-sm font-medium ${isActive ? 'active' : 'text-gray-200'}">
+                        <i data-lucide="${link.icon}" class="w-5 h-5 mr-3"></i>
+                        ${link.name}
+                    </a>
+                `;
+            });
+            menuContainer.innerHTML = `
+                <div class="flex flex-col h-full w-64">
+                    <div class="py-6 px-4 flex items-center justify-center nav-sidebar-bg/90 h-20 shadow-lg">
+                        <img src="https://placehold.co/180x40/E31B23/FFFFFF?text=IMPRESOS+S.R.L." alt="Logo Impresos S.R.L." class="h-8 w-auto">
+                    </div>
+                    <div class="px-4 py-6 text-center text-gray-200 border-b border-t border-gray-700/50">
+                        <h2 class="font-semibold text-lg text-white">Bienvenido,</h2>
+                        <p class="text-sm text-yellow-400 truncate" id="user-display-name">${userName}</p>
+                    </div>
+                    <nav class="mt-4 px-4 space-y-2 flex-grow">
+                        ${linksHtml}
+                    </nav>
+                    <div class="mt-auto p-4 border-t border-gray-700">
+                        <button id="logout-button" class="nav-link flex items-center w-full px-4 py-3 rounded-lg text-sm font-medium text-gray-200 hover:bg-red-800 hover:text-white">
+                            <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // =========================================================
+        // 1. INICIALIZACIÓN (VISUAL ONLY)
+        // =========================================================
+        window.onload = () => {
+            const activePage = 'inventario_recepcion.html';
+            renderSidebar(activePage, 'Gestor de Almacén');
+            
+            document.getElementById('sidebar-toggle').addEventListener('click', window.toggleSidebar);
+
+            // Placeholders for modals
+            window.showModal = (modalId) => document.getElementById(modalId)?.classList.remove('hidden');
+            window.hideModal = (modalId) => document.getElementById(modalId)?.classList.add('hidden');
+            
+            // Conectar botón a modal
+            document.getElementById('btn-receive')?.addEventListener('click', () => showModal('receive-modal-container'));
+            
+            // Lógica del panel de filtros
+            const filterButton = document.getElementById('filter-button');
+            const filterPanel = document.getElementById('filter-panel');
+            if (filterButton && filterPanel) {
+                filterButton.onclick = () => filterPanel.classList.toggle('hidden');
+            }
+            
+            // Final icon render
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

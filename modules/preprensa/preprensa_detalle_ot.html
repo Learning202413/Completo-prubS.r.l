@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Detalle de OT | Impresos S.R.L.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* COLORES CORPORATIVOS (Impresos S.R.L.) */
+        .color-primary-red { background-color: #E31B23; } 
+        .text-primary-red { color: #E31B23; }
+        .border-primary-red { border-color: #E31B23; }
+        .btn-accent { background-color: #f59e0b; } /* Ámbar/Naranja */
+        .btn-accent:hover { background-color: #d97706; }
+        .btn-critical { background-color: #16a34a; } /* Verde para "Listo" */
+        .btn-critical:hover { background-color: #15803d; }
+
+        .nav-sidebar-bg { background-color: #334155; }
+        .nav-link { transition: background-color 0.2s, color 0.2s; }
+        .nav-link:hover { background-color: #475569; }
+        .nav-link.active { background-color: #E31B23; color: white; }
+
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <div id="sidebar-menu" class="w-64 fixed top-0 left-0 h-full nav-sidebar-bg shadow-2xl z-20 overflow-y-auto transition-all duration-300">
+            <!-- Renderizado por JS -->
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="flex-1 ml-64 p-8 overflow-y-auto z-10 transition-all duration-300">
+            <header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-8">
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <h1 id="ot-header" class="text-3xl font-bold text-gray-800">Taller de Diseño: OT-1234</h1>
+                </div>
+                <span class="text-sm text-gray-500">Módulo: Pre-Prensa</span>
+            </header>
+            
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                
+                <!-- Columna Izquierda: Flujo de Trabajo y Resumen -->
+                <div class="xl:col-span-2 space-y-8">
+                    
+                    <!-- 1. Resumen de la OT (Solo Lectura) -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
+                            <i data-lucide="file-text" class="w-6 h-6 mr-3 text-primary-red"></i> Resumen de la Orden
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500">Cliente</label>
+                                <p class="font-semibold text-lg text-gray-900">Industrias Gráficas S.A.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500">Producto</label>
+                                <p class="font-semibold text-lg text-gray-900">1000 Revistas A4</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-500">Especificaciones Técnicas</label>
+                                <p class="font-mono text-sm text-gray-700 bg-gray-100 p-3 rounded-lg">Couche 150gr, Tinta Full Color, Acabado Barniz UV, Engrapado.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Formulario de Avance Secuencial -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center">
+                            <i data-lucide="steps" class="w-6 h-6 mr-3 text-primary-red"></i> Flujo de Avance (Pre-Prensa)
+                        </h2>
+                        <ol class="relative border-l border-gray-300 space-y-8">
+                            
+                            <!-- Etapa 1: Ajuste de Archivos -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="check" class="w-5 h-5 text-green-700"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">1. Ajuste de Archivos</h3>
+                                <p class="text-sm text-gray-500 mb-3">Revisión y corrección del arte del cliente.</p>
+                                <button disabled class="px-3 py-1 bg-gray-200 text-gray-500 text-sm rounded-md">Marcado como Terminado</button>
+                                <time class="block text-xs text-gray-400 mt-2">Iniciado: 16 Nov, 17:05 | Terminado: 16 Nov, 17:30</time>
+                            </li>
+
+                            <!-- Etapa 2: Reserva de Materiales (Crítico) -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="package-check" class="w-5 h-5 text-blue-700"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">2. Reserva de Materiales (Stock Check)</h3>
+                                <p class="text-sm text-gray-500 mb-3">Verificar y reservar insumos (papel, tintas) del Inventario.</p>
+                                <button onclick="showModal('Reservar', 'Simulación de reserva de materiales. ¡Stock OK!')" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                                    <i data-lucide="package-check" class="w-4 h-4 inline mr-2"></i> Reservar Materiales
+                                </button>
+                                <span class="ml-4 text-sm font-bold text-red-600" id="stock-status">¡PENDIENTE!</span>
+                            </li>
+                            
+                            <!-- Etapa 3: Aprobación de Cliente -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="user-check" class="w-5 h-5 text-gray-600"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">3. Aprobación del Cliente</h3>
+                                <p class="text-sm text-gray-500 mb-3">Enviar la prueba final al cliente para su aprobación formal.</p>
+                                <button onclick="showModal('Solicitar Aprobación', 'Evento DISEÑO_LISTO_PARA_APROBACION disparado.')" class="px-4 py-2 btn-accent text-white font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition">
+                                    <i data-lucide="send" class="w-4 h-4 inline mr-2"></i> Solicitar Aprobación de Cliente
+                                </button>
+                            </li>
+
+                            <!-- Etapa 4: Generación de Placas -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="file-image" class="w-5 h-5 text-gray-600"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">4. Generación de Placas (CTP)</h3>
+                                <p class="text-sm text-gray-500 mb-3">Preparar los archivos finales para las placas de impresión (offset).</p>
+                                <button disabled class="px-3 py-1 bg-gray-200 text-gray-500 text-sm rounded-md">Pendiente de Aprobación</button>
+                            </li>
+
+                        </ol>
+                        
+                        <!-- Etapa 5: Botón Final (Listo para Prensa) -->
+                        <div class="mt-10 pt-6 border-t">
+                             <button type="button" id="btn-ready-for-press" disabled class="w-full px-6 py-4 btn-critical text-white font-bold text-lg rounded-lg shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i data-lucide="printer" class="w-6 h-6 inline mr-3"></i> MARCAR COMO LISTO PARA PRENSA
+                            </button>
+                            <p class="text-center text-sm text-gray-500 mt-2">Debe reservar materiales y tener la aprobación del cliente para activar.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Columna Derecha: Archivos y Comentarios -->
+                <div class="xl:col-span-1 space-y-8">
+                    
+                    <!-- 3. Archivos y Versiones -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
+                           <i data-lucide="folder-up" class="w-5 h-5 mr-3 text-primary-red"></i> Archivos y Versiones
+                        </h2>
+                        <div class="space-y-3 mb-4">
+                            <label class="block w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-red-500 hover:bg-gray-50 transition">
+                                <i data-lucide="upload-cloud" class="w-8 h-8 mx-auto text-gray-400"></i>
+                                <span class="mt-2 block text-sm font-semibold text-gray-600">Adjuntar Archivo de Diseño</span>
+                                <input type="file" class="hidden">
+                            </label>
+                            <button class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">Subir Nueva Versión</button>
+                        </div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Historial de Versiones</h4>
+                        <ul class="divide-y divide-gray-200">
+                            <li class="flex items-center justify-between py-2">
+                                <div class="flex items-center">
+                                    <i data-lucide="file-image" class="w-5 h-5 text-gray-500 mr-2"></i>
+                                    <span class="text-sm text-gray-700">v2_final_placas.ctp</span>
+                                </div>
+                                <span class="text-xs text-gray-400">16 Nov, 17:50</span>
+                            </li>
+                             <li class="flex items-center justify-between py-2">
+                                <div class="flex items-center">
+                                    <i data-lucide="file-check" class="w-5 h-5 text-green-600 mr-2"></i>
+                                    <span class="text-sm text-gray-700">v1_prueba_cliente.pdf</span>
+                                </div>
+                                <span class="text-xs text-gray-400">16 Nov, 17:30</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 4. Log de Comentarios Internos -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                         <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
+                           <i data-lucide="message-square" class="w-5 h-5 mr-3 text-primary-red"></i> Log de Comentarios
+                        </h2>
+                        <div class="space-y-4 h-64 overflow-y-auto bg-gray-100 p-3 rounded-lg mb-4">
+                            <div class="text-sm">
+                                <p class="font-bold text-gray-800">Admin</p>
+                                <p class="p-2 rounded-lg bg-gray-200">Por favor, priorizar esta OT. Cliente es urgente.</p>
+                                <span class="text-xs text-gray-400">16 Nov, 17:02</span>
+                            </div>
+                            <div class="text-sm">
+                                <p class="font-bold text-red-600 text-right">Yo (Diseñador 1)</p>
+                                <p class="p-2 rounded-lg bg-red-100">Recibido. Iniciando ajuste de archivos.</p>
+                                <span class="text-xs text-gray-400 float-right">16 Nov, 17:05</span>
+                            </div>
+                        </div>
+                        <textarea class="w-full p-2 border border-gray-300 rounded-lg text-sm" rows="3" placeholder="Escribir comentario interno..."></textarea>
+                        <button class="w-full mt-2 px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">Enviar Comentario</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal de Notificación -->
+            <div id="modal-container" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-xl bg-white">
+                    <h3 id="modal-title" class="text-xl font-bold mb-4 text-gray-800">Notificación</h3>
+                    <p id="modal-body" class="text-gray-600 mb-6">Mensaje del sistema.</p>
+                    <div class="flex justify-end">
+                        <button onclick="hideModal()" class="px-4 py-2 color-primary-red text-white text-base font-medium rounded-lg shadow-sm hover:bg-red-700">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Cargar iconos de Lucide al inicio
+        lucide.createIcons();
+
+        // =========================================================
+        // 0. NAVEGACIÓN Y CONFIGURACIÓN GLOBAL (VISUAL ONLY)
+        // =========================================================
+        const NAV_LINKS = [
+             { id: 'cola', name: 'Cola de Tareas', icon: 'list-todo', href: 'preprensa_cola.html' }
+        ];
+        
+        let sidebarVisible = true;
+
+        window.toggleSidebar = function() {
+            const sidebarEl = document.getElementById('sidebar-menu');
+            const mainContentEl = document.getElementById('main-content');
+            const toggleIconEl = document.querySelector('#sidebar-toggle i');
+            
+            if (!mainContentEl || !sidebarEl || !toggleIconEl) return;
+
+            sidebarVisible = !sidebarVisible;
+
+            if (sidebarVisible) {
+                sidebarEl.classList.remove('-translate-x-full');
+                mainContentEl.classList.add('ml-64');
+                toggleIconEl.setAttribute('data-lucide', 'menu');
+            } else {
+                sidebarEl.classList.add('-translate-x-full');
+                mainContentEl.classList.remove('ml-64');
+                toggleIconEl.setAttribute('data-lucide', 'chevrons-right');
+            }
+            lucide.createIcons(); // Re-render icons after change
+        }
+
+        function renderSidebar(currentPage, userName = 'Usuario') {
+            const menuContainer = document.getElementById('sidebar-menu');
+            let linksHtml = '';
+            
+            NAV_LINKS.forEach(link => {
+                const isActive = currentPage === link.href;
+                linksHtml += `
+                    <a href="${link.href}" class="nav-link flex items-center px-4 py-3 rounded-lg text-sm font-medium ${isActive ? 'active' : 'text-gray-200'}">
+                        <i data-lucide="${link.icon}" class="w-5 h-5 mr-3"></i>
+                        ${link.name}
+                    </a>
+                `;
+            });
+
+            menuContainer.innerHTML = `
+                <div class="flex flex-col h-full w-64">
+                    <div class="py-6 px-4 flex items-center justify-center nav-sidebar-bg/90 h-20 shadow-lg">
+                        <img src="https://placehold.co/180x40/E31B23/FFFFFF?text=IMPRESOS+S.R.L." alt="Logo Impresos S.R.L." class="h-8 w-auto">
+                    </div>
+                    <div class="px-4 py-6 text-center text-gray-200 border-b border-t border-gray-700/50">
+                        <h2 class="font-semibold text-lg text-white">Bienvenido,</h2>
+                        <p class="text-sm text-yellow-400 truncate" id="user-display-name">${userName}</p>
+                    </div>
+                    <nav class="mt-4 px-4 space-y-2 flex-grow">
+                        ${linksHtml}
+                    </nav>
+                    <div class="mt-auto p-4 border-t border-gray-700">
+                        <button id="logout-button" class="nav-link flex items-center w-full px-4 py-3 rounded-lg text-sm font-medium text-gray-200 hover:bg-red-800 hover:text-white">
+                            <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons(); // Re-render icons after sidebar creation
+        }
+
+        // =========================================================
+        // 1. INICIALIZACIÓN (VISUAL ONLY)
+        // =========================================================
+        window.onload = () => {
+            
+            // Lógica corregida: El "Taller" es un detalle de la "Cola",
+            // por lo que la "Cola" debe permanecer activa en el menú.
+            const activePage = 'preprensa_cola.html';
+
+            renderSidebar(activePage, 'Diseñador 1');
+            
+            document.getElementById('sidebar-toggle').addEventListener('click', window.toggleSidebar);
+
+            // Placeholders for modals
+            window.hideModal = () => document.getElementById('modal-container')?.classList.add('hidden');
+            window.showModal = (title, body) => {
+                 document.getElementById('modal-title').textContent = title;
+                 document.getElementById('modal-body').textContent = body;
+                 document.getElementById('modal-container')?.classList.remove('hidden');
+            }
+            
+            // Final icon render
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

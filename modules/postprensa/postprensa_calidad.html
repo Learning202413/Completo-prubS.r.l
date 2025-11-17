@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Control de Calidad | Impresos S.R.L.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* COLORES CORPORATIVOS (Impresos S.R.L.) */
+        .color-primary-red { background-color: #E31B23; } 
+        .text-primary-red { color: #E31B23; }
+        .border-primary-red { border-color: #E31B23; }
+        .btn-approve { background-color: #16a34a; } /* Verde */
+        .btn-approve:hover { background-color: #15803d; }
+        .btn-reject { background-color: #ef4444; } /* Rojo */
+        .btn-reject:hover { background-color: #dc2626; }
+        .btn-complete { background-color: #0e7490; } /* Cyan */
+        .btn-complete:hover { background-color: #155e75; }
+
+        .nav-sidebar-bg { background-color: #334155; }
+        .nav-link { transition: background-color 0.2s, color 0.2s; }
+        .nav-link:hover { background-color: #475569; }
+        .nav-link.active { background-color: #E31B23; color: white; }
+
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <div id="sidebar-menu" class="w-64 fixed top-0 left-0 h-full nav-sidebar-bg shadow-2xl z-20 overflow-y-auto transition-all duration-300">
+            <!-- Renderizado por JS -->
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="flex-1 ml-64 p-8 overflow-y-auto z-10 transition-all duration-300">
+            <header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-8">
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <h1 id="ot-header" class="text-3xl font-bold text-gray-800">Control de Calidad: OT-1234</h1>
+                </div>
+                <span class="text-sm text-gray-500">Módulo: Post-Prensa</span>
+            </header>
+            
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                
+                <!-- Columna Izquierda: Flujo de Trabajo y Resumen -->
+                <div class="xl:col-span-2 space-y-8">
+                    
+                    <!-- 1. Resumen de la OT (Solo Lectura) -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
+                            <i data-lucide="file-text" class="w-6 h-6 mr-3 text-primary-red"></i> Resumen de la Orden
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500">Cliente</label>
+                                <p class="font-semibold text-lg text-gray-900">Industrias Gráficas S.A.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500">Producto</label>
+                                <p class="font-semibold text-lg text-gray-900">1000 Revistas A4</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-500">Especificaciones de Acabado</label>
+                                <p class="font-mono text-sm text-gray-700 bg-gray-100 p-3 rounded-lg">Corte (Guillotina), Barniz UV, Engrapado, Empaquetado x100.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Formulario de Avance Secuencial (Acabados) -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center">
+                            <i data-lucide="steps" class="w-6 h-6 mr-3 text-primary-red"></i> Flujo de Avance (Acabados)
+                        </h2>
+                        <ol class="relative border-l border-gray-300 space-y-8">
+                            
+                            <!-- Etapa 1: Corte -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="scissors" class="w-5 h-5 text-blue-700"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">1. Corte / Guillotina</h3>
+                                <p class="text-sm text-gray-500 mb-3">Asignar operador y marcar como terminado.</p>
+                                <button onclick="showModal('Estación Terminada', 'Simulación de registro de tiempo.')" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                                    <i data-lucide="check" class="w-4 h-4 inline mr-2"></i> Marcar Estación Terminada
+                                </button>
+                                <time class="block text-xs text-gray-400 mt-2">Iniciado: 16 Nov, 18:05 | Terminado: (Pendiente)</time>
+                            </li>
+
+                            <!-- Etapa 2: Engrapado/Encolado -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="book-copy" class="w-5 h-5 text-gray-600"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">2. Engrapado / Encolado</h3>
+                                <p class="text-sm text-gray-500 mb-3">Proceso de unión de las páginas.</p>
+                                <button disabled class="px-3 py-1 bg-gray-200 text-gray-500 text-sm rounded-md">Pendiente de Corte</button>
+                            </li>
+                            
+                            <!-- Etapa 3: Empaquetado -->
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full -left-4 ring-8 ring-white">
+                                    <i data-lucide="package" class="w-5 h-5 text-gray-600"></i>
+                                </span>
+                                <h3 class="font-semibold text-lg text-gray-900">3. Empaquetado</h3>
+                                <p class="text-sm text-gray-500 mb-3">Preparación final para entrega.</p>
+                                <button disabled class="px-3 py-1 bg-gray-200 text-gray-500 text-sm rounded-md">Pendiente</button>
+                            </li>
+                        </ol>
+                    </div>
+
+                </div>
+
+                <!-- Columna Derecha: Control de Calidad y Cierre -->
+                <div class="xl:col-span-1 space-y-8">
+                    
+                    <!-- 3. Checklist de Calidad -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
+                           <i data-lucide="shield-check" class="w-5 h-5 mr-3 text-primary-red"></i> Checklist de Calidad (QC)
+                        </h2>
+                        <div class="space-y-3 mb-4">
+                            <label class="flex items-center text-gray-700"><input type="checkbox" class="h-5 w-5 text-red-600 rounded mr-3 focus:ring-red-500"> ¿Colores correctos?</label>
+                            <label class="flex items-center text-gray-700"><input type="checkbox" class="h-5 w-5 text-red-600 rounded mr-3 focus:ring-red-500"> ¿Corte preciso?</label>
+                            <label class="flex items-center text-gray-700"><input type="checkbox" class="h-5 w-5 text-red-600 rounded mr-3 focus:ring-red-500"> ¿Engrapado/Encolado firme?</label>
+                            <label class="flex items-center text-gray-700"><input type="checkbox" class="h-5 w-5 text-red-600 rounded mr-3 focus:ring-red-500"> ¿Cantidad completa?</label>
+                        </div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Comentarios de Calidad</h4>
+                        <textarea class="w-full p-2 border border-gray-300 rounded-lg text-sm" rows="3" placeholder="Anotar fallas o aprobación..."></textarea>
+                    </div>
+
+                    <!-- 4. Acciones de Cierre -->
+                    <div class="bg-white shadow-xl rounded-xl p-6">
+                         <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
+                           <i data-lucide="gavel" class="w-5 h-5 mr-3 text-primary-red"></i> Decisión Final
+                        </h2>
+                        <div class="space-y-4">
+                            <button id="btn-reject-qc" class="w-full flex items-center justify-center px-4 py-3 btn-reject text-white font-bold rounded-lg shadow-md transition hover:bg-red-700">
+                                <i data-lucide="thumbs-down" class="w-5 h-5 mr-2"></i> Rechazar Calidad (Re-trabajo)
+                            </button>
+                            <button id="btn-approve-qc" class="w-full flex items-center justify-center px-4 py-3 btn-approve text-white font-bold rounded-lg shadow-md transition hover:bg-green-700">
+                                <i data-lucide="thumbs-up" class="w-5 h-5 mr-2"></i> Aprobar Calidad
+                            </button>
+                            <button id="btn-complete-order" disabled class="w-full flex items-center justify-center px-4 py-3 btn-complete text-white font-bold rounded-lg shadow-md transition disabled:opacity-50">
+                                <i data-lucide="package-check" class="w-5 h-5 mr-2"></i> Empaquetar y Marcar Orden Completada
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Notificación -->
+            <div id="modal-container" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-xl bg-white">
+                    <h3 id="modal-title" class="text-xl font-bold mb-4 text-gray-800">Notificación</h3>
+                    <p id="modal-body" class="text-gray-600 mb-6">Mensaje del sistema.</p>
+                    <div class="flex justify-end">
+                        <button onclick="hideModal()" class="px-4 py-2 color-primary-red text-white text-base font-medium rounded-lg shadow-sm hover:bg-red-700">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Cargar iconos de Lucide al inicio
+        lucide.createIcons();
+
+        // =========================================================
+        // 0. NAVEGACIÓN Y CONFIGURACIÓN GLOBAL (VISUAL ONLY)
+        // =========================================================
+        const NAV_LINKS = [
+             { id: 'cola', name: 'Cola de Acabados', icon: 'list-todo', href: 'postprensa_cola.html' }
+        ];
+        
+        let sidebarVisible = true;
+
+        window.toggleSidebar = function() {
+            const sidebarEl = document.getElementById('sidebar-menu');
+            const mainContentEl = document.getElementById('main-content');
+            const toggleIconEl = document.querySelector('#sidebar-toggle i');
+            
+            if (!mainContentEl || !sidebarEl || !toggleIconEl) return;
+
+            sidebarVisible = !sidebarVisible;
+
+            if (sidebarVisible) {
+                sidebarEl.classList.remove('-translate-x-full');
+                mainContentEl.classList.add('ml-64');
+                toggleIconEl.setAttribute('data-lucide', 'menu');
+            } else {
+                sidebarEl.classList.add('-translate-x-full');
+                mainContentEl.classList.remove('ml-64');
+                toggleIconEl.setAttribute('data-lucide', 'chevrons-right');
+            }
+            lucide.createIcons(); // Re-render icons after change
+        }
+
+        function renderSidebar(currentPage, userName = 'Usuario') {
+            const menuContainer = document.getElementById('sidebar-menu');
+            let linksHtml = '';
+            
+            NAV_LINKS.forEach(link => {
+                const isActive = currentPage === link.href;
+                linksHtml += `
+                    <a href="${link.href}" class="nav-link flex items-center px-4 py-3 rounded-lg text-sm font-medium ${isActive ? 'active' : 'text-gray-200'}">
+                        <i data-lucide="${link.icon}" class="w-5 h-5 mr-3"></i>
+                        ${link.name}
+                    </a>
+                `;
+            });
+
+            menuContainer.innerHTML = `
+                <div class="flex flex-col h-full w-64">
+                    <div class="py-6 px-4 flex items-center justify-center nav-sidebar-bg/90 h-20 shadow-lg">
+                        <img src="https://placehold.co/180x40/E31B23/FFFFFF?text=IMPRESOS+S.R.L." alt="Logo Impresos S.R.L." class="h-8 w-auto">
+                    </div>
+                    <div class="px-4 py-6 text-center text-gray-200 border-b border-t border-gray-700/50">
+                        <h2 class="font-semibold text-lg text-white">Bienvenido,</h2>
+                        <p class="text-sm text-yellow-400 truncate" id="user-display-name">${userName}</p>
+                    </div>
+                    <nav class="mt-4 px-4 space-y-2 flex-grow">
+                        ${linksHtml}
+                    </nav>
+                    <div class="mt-auto p-4 border-t border-gray-700">
+                        <button id="logout-button" class="nav-link flex items-center w-full px-4 py-3 rounded-lg text-sm font-medium text-gray-200 hover:bg-red-800 hover:text-white">
+                            <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons(); // Re-render icons after sidebar creation
+        }
+
+        // =========================================================
+        // 1. INICIALIZACIÓN (VISUAL ONLY)
+        // =========================================================
+        window.onload = () => {
+            
+            // Lógica corregida: El "Taller" es un detalle de la "Cola",
+            // por lo que la "Cola" debe permanecer activa en el menú.
+            const activePage = 'postprensa_cola.html';
+
+            renderSidebar(activePage, 'Inspector de Calidad');
+            
+            document.getElementById('sidebar-toggle').addEventListener('click', window.toggleSidebar);
+
+            // Placeholders for modals
+            window.hideModal = () => document.getElementById('modal-container')?.classList.add('hidden');
+            window.showModal = (title, body) => {
+                 document.getElementById('modal-title').textContent = title;
+                 document.getElementById('modal-body').textContent = body;
+                 document.getElementById('modal-container')?.classList.remove('hidden');
+            }
+            
+            // Final icon render
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
