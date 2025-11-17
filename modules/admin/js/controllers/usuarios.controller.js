@@ -17,9 +17,23 @@ const renderUsersTable = (users) => {
 
     tableBody.innerHTML = ''; // Limpiar tabla
     
+    // Si no hay usuarios, inyectar una fila de "No hay datos" (para UX)
+    if (users.length === 0) {
+         tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-8 text-center text-gray-500 font-medium">
+                    No se encontraron usuarios o la tabla está vacía.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+
     users.forEach(user => {
         // Asumiendo que user tiene { id, name, email, role, status }
-        const statusClass = user.status === 'Online' ? 'text-green-600 bg-green-500' : 'text-gray-500 bg-gray-400';
+        const status = user.status || 'Offline'; // Default a Offline si es null
+        const statusClass = status === 'Online' ? 'text-green-600 bg-green-500' : 'text-gray-500 bg-gray-400';
         
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
@@ -29,9 +43,9 @@ const renderUsersTable = (users) => {
             <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">${user.name}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.email}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm ${user.role.includes('Admin') ? 'font-bold text-red-600' : 'text-gray-500'}">${user.role}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm" data-status-value="${user.status}">
-                <span class="flex items-center text-xs font-semibold ${statusClass}">
-                    <span class="w-2 h-2 rounded-full mr-1.5 ${statusClass.split(' ')[1].replace('text-', 'bg-')}"></span>${user.status}
+            <td class="px-6 py-4 whitespace-nowrap text-sm" data-status-value="${status}">
+                <span class="flex items-center text-xs font-semibold ${statusClass.includes('green') ? 'text-green-600' : 'text-gray-500'}">
+                    <span class="w-2 h-2 rounded-full mr-1.5 ${statusClass.split(' ')[1].replace('text-', 'bg-')}"></span>${status}
                 </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
@@ -57,7 +71,7 @@ const handleUserDelete = (userId, userName) => {
     // 1. Mostrar el modal de confirmación
     window.UI.showConfirmModal(
         `Confirmar Eliminación de Usuario`,
-        `¿Está seguro de que desea eliminar permanentemente al usuario "${userName}" (ID: ${userId})? Esta acción es irreversible.`,
+        `¿Está seguro de que desea eliminar permanentemente al usuario "${userName}" (ID: ${userId})? Esta acción es irreversible en la base de datos de perfiles.`,
         `Sí, Eliminar Usuario`,
         async () => {
             // Lógica de eliminación (ejecutada al confirmar)
@@ -66,11 +80,11 @@ const handleUserDelete = (userId, userName) => {
             const result = await UsuariosService.deleteUser(userId);
 
             if (result.success) {
-                window.UI.showToast(`Usuario ${userName} eliminado.`, 'success');
+                window.UI.showToast(`Usuario ${userName} eliminado (perfil).`, 'success');
                 // Recargar o actualizar la lista de usuarios
                 fetchUsersAndRender();
             } else {
-                window.UI.showToast(`Error: ${result.error}`, 'error');
+                window.UI.showToast(`Error al eliminar: ${result.error}`, 'error');
             }
         }
     );
@@ -117,6 +131,9 @@ const applyFilters = () => {
 
     // El filtrado es en el DOM ya renderizado
     Array.from(tableBody.children).forEach(row => {
+        // Omitir la fila de "No hay datos" si existe
+        if (row.cells.length <= 1) return; 
+
         const name = row.children[0].textContent.toLowerCase();
         const email = row.children[1].textContent.toLowerCase();
         const role = row.children[2].textContent;
@@ -138,7 +155,7 @@ const applyFilters = () => {
  * Obtiene la lista de usuarios de Supabase y renderiza la tabla.
  */
 const fetchUsersAndRender = async () => {
-    window.UI.showLoader(); // Muestra un loader
+    window.UI.showLoader(); // Muestra un loader (asumiendo que UI.showLoader/hideLoader existe)
     const users = await UsuariosService.getAllUsers();
     window.UI.hideLoader(); // Oculta el loader
     
@@ -196,8 +213,16 @@ const handleModalSubmit = async (e) => {
         // Obtener datos comunes
         const email = document.getElementById(`user-${actionType}-email`).value;
         const name = document.getElementById(`user-${actionType}-name`).value;
-        const password = document.getElementById(`user-${actionType}-password`).value; 
+        // La contraseña solo se usa si no está vacía o si es la de creación
+        const passwordInput = document.getElementById(`user-${actionType}-password`);
+        const password = passwordInput ? passwordInput.value : null; 
         const role = document.getElementById(`user-${actionType}-role`).value;
+
+        // Validar contraseña en caso de creación
+        if (isCreate && (!password || password.length < 8)) {
+            window.UI.showToast("La contraseña es obligatoria y debe tener al menos 8 caracteres para la creación.", 'warning');
+            return;
+        }
 
         window.UI.showLoader();
 
@@ -214,9 +239,19 @@ const handleModalSubmit = async (e) => {
         } else { 
             // Lógica de Edición
             const userId = document.getElementById('user-edit-id-field').value;
-            // Lógica de update. Usar UsuariosService.updateUser(userId, data, password)
-            console.log(`[ACCIÓN: EDIT] Llamando a update para ID ${userId}...`);
-            window.UI.showToast("Edición simulada: La lógica de edición debe ser implementada en el Service.", 'info');
+            
+            const result = await UsuariosService.updateUser(userId, { name, role }, password);
+            
+            if (result.success) {
+                let message = `Usuario ${name} (ID: ${userId}) actualizado exitosamente.`;
+                if (!result.authSuccess) {
+                    message += ` ${result.authMessage}`;
+                }
+                window.UI.showToast(message, result.authSuccess ? 'success' : 'warning');
+                fetchUsersAndRender(); // Recargar la lista
+            } else {
+                window.UI.showToast(`Error al actualizar usuario: ${result.error}`, 'error');
+            }
         }
 
         window.UI.hideLoader();
@@ -258,11 +293,12 @@ export const UsuariosController = {
         document.getElementById('filter-status')?.addEventListener('change', applyFilters);
         
         // 4. Configurar el formulario (Submit)
+        // Nota: Asegúrate de que este listener esté en el contenedor padre (modalContainer)
+        // para capturar el submit de los formularios inyectados.
         if (modalContainer) {
+            // El listener se adjunta al contenedor que envuelve los formularios dinámicos
             modalContainer.removeEventListener('submit', handleModalSubmit);
             modalContainer.addEventListener('submit', handleModalSubmit);
         }
-        
-        // NOTA: applyFilters ya se llama dentro de fetchUsersAndRender
     }
 };

@@ -20,7 +20,7 @@
 
         <h2 class="text-3xl font-bold text-gray-800 mb-9">Bienvenido</h2>
 
-        <form>
+        <form id="loginForm">
             <!-- Campo de Correo Electrónico -->
             <div class="mb-4 text-left">
                 <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Correo Electrónico</label>
@@ -67,10 +67,15 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- (Aquí inyectaremos el messageBox de JS) -->
+            <div id="messageBox" class="p-3 text-sm rounded-lg font-medium hidden text-center mt-3" role="alert"></div>
+
 
             <!-- Botón de Iniciar Sesión -->
             <button
                 type="submit"
+                id="loginButton"
                 class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg w-full focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
             >
                 Iniciar Sesión
@@ -82,21 +87,8 @@
         </p>
     </div>
 
-    <!-- Script para la funcionalidad del ojo -->
-    <script>
-        const togglePassword = document.getElementById('togglePassword');
-        const password = document.getElementById('password');
-        const eyeOpen = document.getElementById('eye-open');
-        const eyeClosed = document.getElementById('eye-closed');
+    <!-- CONEXIÓN AL CONTROLADOR DE LOGIN DE SUPABASE -->
+    <script type="module" src="./login.controller.js"></script>
 
-        togglePassword.addEventListener('click', function (e) {
-            // Alternar el tipo de input
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            // Alternar los íconos
-            eyeOpen.classList.toggle('hidden');
-            eyeClosed.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>
