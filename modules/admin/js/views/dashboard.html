@@ -1,0 +1,89 @@
+<header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-8">
+    <div class="flex items-center">
+        <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-800">Dashboard Gerencial</h1>
+    </div>
+    <span class="text-sm text-gray-500">Módulo: Admin</span>
+</header>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 uppercase">Alertas Críticas</p>
+                <p class="text-4xl font-bold text-gray-900">8</p>
+                <p class="text-sm text-gray-500">Ítems con Stock Bajo</p>
+            </div>
+            <div class="p-3 bg-red-100 rounded-full">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 uppercase">OTs Completadas (Mes)</p>
+                <p class="text-4xl font-bold text-gray-900">142</p>
+                <p class="text-sm text-gray-500">Total OTs del mes</p>
+            </div>
+            <div class="p-3 bg-green-100 rounded-full">
+                <i data-lucide="check-circle" class="w-8 h-8 text-green-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 uppercase">Usuarios Conectados</p>
+                <p class="text-4xl font-bold text-gray-900">6</p>
+                <p class="text-sm text-gray-500">En tiempo real (Presence)</p>
+            </div>
+            <div class="p-3 bg-blue-100 rounded-full">
+                <i data-lucide="activity" class="w-8 h-8 text-blue-600"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+    <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-xl">
+        <h3 class="font-bold text-gray-700 mb-4">Tendencia de OTs Completadas (Últimos 30 días)</h3>
+        <div class="flex items-center justify-center h-80 bg-gray-100 rounded-lg">
+            <p class="text-gray-500">[Placeholder para Gráfico de Líneas/Barras]</p>
+        </div>
+    </div>
+    
+    <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-xl">
+        <h3 class="font-bold text-gray-700 mb-4 border-b pb-2">Usuarios Conectados (Detalle)</h3>
+        <ul class="divide-y divide-gray-200 h-80 overflow-y-auto">
+            <li class="py-2 flex items-center justify-between">
+                <span class="font-medium text-gray-800">Ana García (Ventas)</span>
+                <span class="flex items-center text-xs text-green-600 font-semibold"><span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Online</span>
+            </li>
+            <li class="py-2 flex items-center justify-between">
+                <span class="font-medium text-gray-800">Carlos Ruiz (Diseño)</span>
+                <span class="flex items-center text-xs text-green-600 font-semibold"><span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Online</span>
+            </li>
+            <li class="py-2 flex items-center justify-between">
+                <span class="font-medium text-gray-800">Luis Torres (Prensa)</span>
+                <span class="flex items-center text-xs text-green-600 font-semibold"><span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Online</span>
+            </li>
+             <li class="py-2 flex items-center justify-between">
+                <span class="font-medium text-gray-800">Maria Paz (Acabados)</span>
+                <span class="flex items-center text-xs text-green-600 font-semibold"><span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Online</span>
+            </li>
+             <li class="py-2 flex items-center justify-between">
+                <span class="font-medium text-gray-800">Javier Solis (Inventario)</span>
+                <span class="flex items-center text-xs text-green-600 font-semibold"><span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Online</span>
+            </li>
+             <li class="py-2 flex items-center justify-between">
+                <span class="font-medium text-gray-800">Gerente (Admin)</span>
+                <span class="flex items-center text-xs text-green-600 font-semibold"><span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Online</span>
+            </li>
+        </ul>
+    </div>
+</div>
