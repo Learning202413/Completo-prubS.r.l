@@ -1,0 +1,186 @@
+<!-- Vista Parcial: modules/inventario/js/views/stock.html -->
+<header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-8">
+    <div class="flex items-center">
+        <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-800">Gestión de Stock e Insumos</h1>
+    </div>
+    <span class="text-sm text-gray-500">Módulo: Inventario y Compras</span>
+</header>
+
+<!-- Controles Superiores -->
+<div class="flex flex-col lg:flex-row justify-between items-center mb-6 space-y-4 lg:space-y-0 lg:space-x-4">
+    <!-- Barra de Búsqueda -->
+    <div class="relative w-full lg:w-96">
+        <input type="text" id="search-input" placeholder="Buscar por Nombre o SKU..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 shadow-sm">
+        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+    </div>
+    
+    <div class="flex space-x-4 w-full lg:w-auto">
+        <!-- Botón de Filtros -->
+        <button id="filter-button" class="w-full lg:w-auto flex items-center justify-center px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-400 transition">
+            <i data-lucide="filter" class="w-5 h-5 mr-2"></i> Filtros
+        </button>
+        <button id="btn-add-item" class="w-full lg:w-auto flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+            <i data-lucide="plus" class="w-5 h-5 mr-2"></i> Agregar Producto
+        </button>
+        <button id="btn-create-oc" class="w-full lg:w-auto flex items-center justify-center px-6 py-2 color-primary-red text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition">
+            <i data-lucide="shopping-cart" class="w-5 h-5 mr-2"></i> Crear OC
+        </button>
+    </div>
+</div>
+
+<!-- Panel de Filtros -->
+<div id="filter-panel" class="bg-white p-6 rounded-xl shadow-lg mb-6 hidden">
+    <h3 class="font-bold text-gray-700 mb-4 border-b pb-2">Opciones de Filtrado</h3>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+            <label for="filter-category" class="block text-sm font-medium text-gray-700">Categoría</label>
+            <select id="filter-category" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm"><option>Papel</option><option>Tintas</option></select>
+        </div>
+        <div>
+            <label for="filter-abc" class="block text-sm font-medium text-gray-700">Clase ABC</label>
+            <select id="filter-abc" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm"><option>A</option><option>B</option><option>C</option></select>
+        </div>
+        <div>
+            <label for="filter-stock" class="block text-sm font-medium text-gray-700">Estado de Stock</label>
+            <select id="filter-stock" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm"><option>Stock Crítico</option><option>OK</option></select>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de Inventario -->
+<div class="bg-white shadow-xl rounded-xl overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="table-header-bg">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">SKU</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Producto</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Clase</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Stock Actual</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Stock Mínimo</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Estado</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-table-body" class="bg-white divide-y divide-gray-200">
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm font-mono text-gray-500">PAP-COU-150</td>
+                    <td class="px-6 py-4 text-sm font-bold text-gray-900">Papel Couche 150gr (Pliego)</td>
+                    <td class="px-6 py-4 text-sm font-bold text-center text-blue-700">A</td>
+                    <td class="px-6 py-4 text-sm font-bold text-center text-gray-800">1200</td>
+                    <td class="px-6 py-4 text-sm font-bold text-center text-gray-500">1000</td>
+                    <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">OK</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                        <button class="text-blue-600 hover:text-blue-800 p-1" title="Editar"><i data-lucide="edit" class="w-5 h-5"></i></button>
+                        <button class="text-red-600 hover:text-red-800 p-1" title="Eliminar"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm font-mono text-gray-500">TIN-CMYK-01</td>
+                    <td class="px-6 py-4 text-sm font-bold text-gray-900">Tinta Offset (CMYK) (Litro)</td>
+                    <td class="px-6 py-4 text-sm font-bold text-center text-blue-700">A</td>
+                    <td class="px-6 py-4 text-sm font-bold text-center text-red-600">50</td>
+                    <td class="px-6 py-4 text-sm font-bold text-center text-gray-500">100</td>
+                    <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Stock Crítico</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                        <button class="text-blue-600 hover:text-blue-800 p-1" title="Editar"><i data-lucide="edit" class="w-5 h-5"></i></button>
+                        <button class="text-red-600 hover:text-red-800 p-1" title="Eliminar"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Paginación -->
+<div id="pagination-controls" class="mt-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-lg">...</div>
+
+<!-- Contenido de Modales (ocultos, listos para inyección) -->
+<div id="modal-definitions" class="hidden">
+
+    <!-- Modal: Agregar Producto -->
+    <div id="item-modal-content">
+        <div class="relative top-10 mx-auto p-5 border w-full max-w-lg shadow-lg rounded-xl bg-white">
+            <h3 id="item-modal-title" class="text-xl font-bold mb-4 text-gray-800">Agregar Nuevo Insumo</h3>
+            <form id="item-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">SKU (Automático)</label>
+                    <input type="text" disabled class="form-input w-full mt-1 p-2 bg-gray-200 border border-gray-300 rounded-lg" value="[Generado automáticamente]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre del Producto <span class="text-red-500">*</span></label>
+                    <input type="text" required class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Stock Inicial Actual <span class="text-red-500">*</span></label>
+                        <input type="number" value="0" min="0" required class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Stock Mínimo <span class="text-red-500">*</span></label>
+                        <input type="number" value="0" min="0" required class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Clase ABC</label>
+                        <select class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg"><option>A</option><option>B</option><option>C</option></select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Categoría</label>
+                        <select class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg"><option>Papel</option><option>Tintas</option><option>Placas</option></select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea rows="3" class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="window.UI.hideModal('item-modal-container')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 color-primary-red text-white rounded-lg hover:bg-red-700">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal: Crear Orden de Compra (OC) -->
+    <div id="oc-modal-content">
+        <div class="relative top-10 mx-auto p-5 border w-full max-w-xl shadow-lg rounded-xl bg-white">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Crear Orden de Compra (OC)</h3>
+            <form id="oc-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Código OC (Automático)</label>
+                        <input type="text" disabled class="form-input w-full mt-1 p-2 bg-gray-200 border border-gray-300 rounded-lg" value="[Generado al guardar]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Proveedor (Buscar) <span class="text-red-500">*</span></label>
+                        <input type="text" required placeholder="Buscar proveedor por RUC o Nombre..." class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg">
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-2">Ítems a Comprar</h4>
+                    <div class="space-y-2 p-2 border rounded-lg bg-gray-50">
+                        <div class="flex space-x-2">
+                            <input type="text" placeholder="Buscar Producto (SKU/Nombre)" class="form-input w-1/2 p-2 border border-gray-300 rounded-lg">
+                            <input type="number" placeholder="Cant." class="form-input w-1/4 p-2 border border-gray-300 rounded-lg">
+                            <input type="number" step="0.01" placeholder="Costo Unit." class="form-input w-1/4 p-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                    <button type="button" class="mt-2 text-sm text-blue-600 hover:underline"><i data-lucide="plus" class="w-4 h-4 inline"></i> Agregar Ítem</button>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Notas/Comentarios</label>
+                    <textarea rows="3" class="form-input w-full mt-1 p-2 border border-gray-300 rounded-lg"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="window.UI.hideModal('oc-modal-container')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 color-primary-red text-white rounded-lg hover:bg-red-700">Generar y Enviar OC</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
