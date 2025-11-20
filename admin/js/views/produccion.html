@@ -1,0 +1,144 @@
+<header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-6">
+    <div class="flex items-center">
+        <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-800">Control de Producción (Asignación)</h1>
+    </div>
+    <span class="text-sm text-gray-500">Módulo: Admin</span>
+</header>
+
+<!-- Controles de Filtros y Búsqueda -->
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
+    <!-- 1. Botón de Filtros (C2: Blanco con Borde) -->
+    <div class="inline-flex rounded-lg shadow-sm">
+        <button id="toggle-filter" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 focus:z-10 focus:ring-2 focus:ring-red-500">
+            <i data-lucide="filter" class="w-4 h-4 inline mr-2"></i>
+            Filtros
+        </button>
+    </div>
+
+    <!-- 2. Barra de Búsqueda (A1: Estándar 40px) -->
+    <div class="relative w-full md:w-96">
+        <input type="text" id="search-input" placeholder="Buscar por ID de OT, Cliente o Producto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 shadow-sm">
+        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+    </div>
+</div>
+
+<!-- VISTA ÚNICA: LISTA MAESTRA -->
+<div id="list-view">
+    <p class="text-gray-500 mb-6">Mostrando todas las OTs en producción. Use los filtros para refinar la búsqueda.</p>
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="table-header-bg">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">ID Orden (OT)</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Cliente</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Producto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Estado Actual</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Recurso Asignado</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="list-table-body" class="bg-white divide-y divide-gray-200">
+                    <!-- Fila 1 (Pendiente) -->
+                    <tr class="hover:bg-gray-50" data-ot-id="OT-1234">
+                        <td class="px-6 py-4 text-sm font-bold text-gray-900">OT-1234</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">Industrias Gráficas</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">1000 Revistas A4</td>
+                        <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Pre-Prensa Pendiente</span></td>
+                        <td class="px-6 py-4 text-sm text-gray-500">(Sin Asignar)</td>
+                        <td class="px-6 py-4 text-center text-sm font-medium">
+                            <!-- Botón de Asignar (B2: Pequeño de Fila) -->
+                            <button class="btn-assign-from-list px-4 py-2 text-sm color-primary-red text-white font-semibold rounded-lg shadow-sm hover:bg-red-700 transition">
+                                <i data-lucide="user-plus" class="w-4 h-4 inline mr-1"></i> Asignar
+                            </button>
+                        </td>
+                    </tr>
+                    <!-- Fila 2 (Asignada) -->
+                    <tr class="hover:bg-gray-50" data-ot-id="OT-1235">
+                        <td class="px-6 py-4 text-sm font-bold text-gray-900">OT-1235</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">Editorial Futuro</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">500 Libros</td>
+                        <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">En Diseño</span></td>
+                        <td class="px-6 py-4 text-sm font-bold text-blue-600">Carlos Ruiz</td>
+                        <td class="px-6 py-4 text-center text-sm font-medium">
+                            <!-- Se usa la clase del botón Secundario (Gris) -->
+                            <button class="btn-assign-from-list px-4 py-2 text-sm bg-gray-300 text-gray-700 font-semibold rounded-lg" disabled>
+                                <i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Asignada
+                            </button>
+                        </td>
+                    </tr>
+                    <!-- Fila 3 (Pendiente de Prensa) -->
+                    <tr class="hover:bg-gray-50" data-ot-id="OT-1236">
+                        <td class="px-6 py-4 text-sm font-bold text-gray-900">OT-1236</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">Cliente Ejemplo</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">2000 Flyers</td>
+                        <td class="px-6 py-4 text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Listo para Prensa</span></td>
+                        <td class="px-6 py-4 text-sm text-gray-500">(Sin Asignar)</td>
+                        <td class="px-6 py-4 text-center text-sm font-medium">
+                            <!-- Botón de Asignar (B2: Pequeño de Fila) -->
+                            <button class="btn-assign-from-list px-4 py-2 text-sm color-primary-red text-white font-semibold rounded-lg shadow-sm hover:bg-red-700 transition">
+                                <i data-lucide="user-plus" class="w-4 h-4 inline mr-1"></i> Asignar
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Paginación para la Vista de Lista (D1: Icono + Borde) -->
+    <div id="pagination-controls" class="mt-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-lg">
+        <span class="text-sm text-gray-700">
+            Mostrando <span id="start-count">1</span> a <span id="end-count">3</span> de <span id="total-count">3</span> resultados.
+        </span>
+        <div class="flex space-x-2">
+            <!-- D1: Icono + Borde -->
+            <button id="prev-page" disabled class="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <span id="current-page" class="px-3 py-1 text-sm font-medium text-gray-700">Página 1</span>
+            <button id="next-page" disabled class="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para asignación (Contenido que será INYECTADO) -->
+<div id="assign-modal-content" class="hidden">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-xl bg-white">
+        <h3 id="assign-modal-title" class="text-xl font-bold mb-4 text-gray-800">Asignar Tarea: OT-####</h3>
+        <form id="assign-form" class="space-y-4">
+            <input type="hidden" id="assign-ot-id" value="">
+            <input type="hidden" id="assign-resource-id" value=""> <!-- ID del operador seleccionado -->
+            <!-- CAMPO AUTOMÁTICO DE FECHA/HORA (hidden) -->
+            <input type="hidden" id="assign-datetime" name="assign-datetime" value="">
+            
+            <div>
+                <label id="assign-role-label" for="assign-search-input" class="block text-sm font-medium text-gray-700">Asignar a Recurso</label>
+                <div class="relative mt-1">
+                    <!-- Input de búsqueda (A1: Estándar 40px) -->
+                    <input type="text" id="assign-search-input" placeholder="Buscar operador por nombre..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm form-input">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Lista de Sugerencias (se poblará con JS) -->
+            <div id="assign-suggestions-list" class="w-full max-h-60 overflow-y-auto border border-gray-200 rounded-lg bg-gray-50">
+                <!-- Contenido generado por JS -->
+            </div>
+
+            <!-- ELIMINAMOS EL CAMPO MANUAL DE FECHA/HORA -->
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <!-- Botón Secundario (Gris) -->
+                <button type="button" onclick="window.UI.hideModal('assign-modal-container')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 text-sm font-semibold">Cancelar</button>
+                <!-- Botón Primario (B2: Pequeño de Fila) -->
+                <button type="submit" id="confirm-assign-button" class="px-4 py-2 text-sm color-primary-red text-white font-semibold rounded-lg shadow-sm hover:bg-red-700 transition" disabled>Confirmar Asignación</button>
+            </div>
+        </form>
+    </div>
+</div>
