@@ -1,0 +1,68 @@
+<header class="flex items-center justify-between pb-6 border-b border-gray-200 mb-8">
+    <div class="flex items-center">
+        <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-800">Trazabilidad de Orden de Trabajo (OT)</h1>
+    </div>
+    <span class="text-sm text-gray-500">Módulo: Admin</span>
+</header>
+
+<!-- Barra de Búsqueda (A1: Estándar 40px) y Botón Primario (B2: Pequeño) -->
+<div class="relative w-full max-w-2xl mx-auto mb-8">
+    <!-- Input de Búsqueda (A1: Estándar 40px) -->
+    <!-- Se ajustó pr-28 en el input para dar espacio al botón de Buscar -->
+    <input type="text" id="search-ot-input" placeholder="Buscar por ID de Orden (Ej: OT-1234)..." class="w-full pl-10 pr-28 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 shadow-sm text-base">
+    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+    <!-- Botón Primario (B2: Pequeño de Fila) -->
+    <button id="btn-search-ot" class="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 text-sm color-primary-red text-white font-semibold rounded-lg shadow-sm hover:bg-red-700 transition">Buscar</button>
+</div>
+
+<div id="trace-panel" class="bg-white shadow-xl rounded-xl p-8 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b">Ciclo de Vida: OT-1234</h2>
+    
+    <ol class="relative border-l border-gray-300 space-y-8" id="trace-timeline">
+        
+        <li class="ml-6">
+            <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full -left-4 ring-8 ring-white">
+                <i data-lucide="file-plus" class="w-5 h-5 text-blue-700"></i>
+            </span>
+            <h3 class="font-semibold text-lg text-gray-900">ORDEN_CREADA</h3>
+            <p class="text-sm text-gray-500">Usuario: Ana García (CRM)</p>
+            <time class="block text-xs text-gray-400 mt-1">16 nov 2025, 17:00:05</time>
+        </li>
+
+        <li class="ml-6">
+            <span class="absolute flex items-center justify-center w-8 h-8 bg-yellow-200 rounded-full -left-4 ring-8 ring-white">
+                <i data-lucide="send" class="w-5 h-5 text-yellow-700"></i>
+            </span>
+            <h3 class="font-semibold text-lg text-gray-900">DISEÑO_LISTO_PARA_APROBACION</h3>
+            <p class="text-sm text-gray-500">Usuario: Carlos Ruiz (Pre-Prensa)</p>
+            <time class="block text-xs text-gray-400 mt-1">16 nov 2025, 17:35:10</time>
+        </li>
+        
+        <li class="ml-6">
+            <span class="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -left-4 ring-8 ring-white">
+                <i data-lucide="printer" class="w-5 h-5 text-green-700"></i>
+            </span>
+            <h3 class="font-semibold text-lg text-gray-900">ORDEN_LISTA_PARA_PRENSA</h3>
+            <p class="text-sm text-gray-500">Usuario: (Automático - Aprob. Cliente)</p>
+            <time class="block text-xs text-gray-400 mt-1">16 nov 2025, 18:15:00</time>
+        </li>
+        
+        <li class="ml-6">
+            <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full -left-4 ring-8 ring-white">
+                <i data-lucide="package" class="w-5 h-5 text-gray-600"></i>
+            </span>
+            <h3 class="font-semibold text-lg text-gray-500">(Pendiente) ORDEN_LISTA_PARA_POSTPRENSA</h3>
+        </li>
+        
+        <li class="ml-6">
+            <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full -left-4 ring-8 ring-white">
+                <i data-lucide="check-circle" class="w-5 h-5 text-gray-600"></i>
+            </span>
+            <h3 class="font-semibold text-lg text-gray-500">(Pendiente) ORDEN_COMPLETADA</h3>
+        </li>
+
+    </ol>
+</div>
